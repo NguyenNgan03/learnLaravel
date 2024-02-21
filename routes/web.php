@@ -49,15 +49,26 @@ Route::get('/', function(){
 
 // Route::redirect('giaolang', 'show-form');
 // Route::view('show-form', 'form');
+Route::get('/',function(){
+    return view('home');
+});
 
 Route::prefix('admin')->group(function(){
-    Route::get('/giaolang',function(){
-        return 'phương thức get của giáo làng';
-    });
+    Route::get('/tin-tuc/{slug}-{id}.html',function($slug=null,$id=null){
+        $content = 'phương thức get của giáo làng: ';
+        $content.= 'id = '.$id.'<br/>';
+        $content.= 'slug  = '.$slug;
+        return $content;
+    })->where(
+        [
+            'slug'=> '[.+]', 
+            'id'=> '[0-9+]'
+        ]
+);
     
     Route::get('show-form',function(){
         return view('form');
-    });
+    })->name('admin.show-form');
     Route::prefix('product')->group(function(){
         Route::get('/',function(){
             return 'danh sách sản phẩm';
