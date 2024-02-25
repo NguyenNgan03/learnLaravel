@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,33 +50,28 @@ Route::get('/', function(){
 
 // Route::redirect('giaolang', 'show-form');
 // Route::view('show-form', 'form');
-Route::get('/',function(){
-    return view('home');
-});
+Route::get('/','App\http\Controllers\HomeController@index')->name('home');
+Route::get('/tin-tuc','\HomeController@getNew')->name('new');
+Route::get('/chuyen-muc/{id}',[HomeController::class,'getCategory']);
 
 Route::prefix('admin')->group(function(){
-    Route::get('/tin-tuc/{slug}-{id}.html',function($slug=null,$id=null){
+    Route::get('/tin-tuc/{id?}-{slug?}.html',function($id=null,$slug=null){
         $content = 'phương thức get của giáo làng: ';
         $content.= 'id = '.$id.'<br/>';
         $content.= 'slug  = '.$slug;
         return $content;
-    })->where(
-        [
-            'slug'=> '[.+]', 
-            'id'=> '[0-9+]'
-        ]
-);
+    })->where('id','\d+')->where('slug','.+')->name('admin.tintuc');
     
     Route::get('show-form',function(){
         return view('form');
     })->name('admin.show-form');
-    Route::prefix('product')->group(function(){
+    Route::prefix('product')->middleware('CheckPermission')->group(function(){
         Route::get('/',function(){
             return 'danh sách sản phẩm';
         });
         Route::get('add',function(){
             return 'thêm sản phẩm';
-        });
+        })->name('admin.product.add');
         Route::get('edit',function(){
             return 'sửa sản phẩm';
         });
