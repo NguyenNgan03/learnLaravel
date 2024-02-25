@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\http\Controllers\CategoriesController;
 use App\http\Controllers\Admin\ProductsController;
+use App\http\Controllers\Admin\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -93,5 +94,8 @@ Route::prefix('category')->group(function(){
 });
 
 Route::prefix('admin')->group(function(){
+    Route::get('/',[DashboardController::class,'index']);
     Route::resource('products',ProductsController::class);
 });
+
+

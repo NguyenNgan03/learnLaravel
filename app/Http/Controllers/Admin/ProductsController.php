@@ -10,6 +10,11 @@ class ProductsController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct(){
+        echo 'product khoi dong';
+    }
+    
+    
     public function index()
     {
         //
