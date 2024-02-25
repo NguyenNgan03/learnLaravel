@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-use App\http\Controllers\HomeController;
-
+use App\http\Controllers\CategoriesController;
+use App\http\Controllers\Admin\ProductsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,10 +15,10 @@ use App\http\Controllers\HomeController;
 |
 */
 
-Route::get('/', function(){
-    $html = '<h1> helo bà cô</h1>';
-    return $html;
-});
+// Route::get('/', function(){
+//     $html = '<h1> helo bà cô</h1>';
+//     return $html;
+// });
 // Route::get('/giaolang',function(){
 //     // return 'phương thức get của giáo làng';
 //     return view('form');
@@ -50,36 +50,48 @@ Route::get('/', function(){
 
 // Route::redirect('giaolang', 'show-form');
 // Route::view('show-form', 'form');
-Route::get('/','App\http\Controllers\HomeController@index')->name('home');
-Route::get('/tin-tuc','\HomeController@getNew')->name('new');
-Route::get('/chuyen-muc/{id}',[HomeController::class,'getCategory']);
+// Route::get('/','App\http\Controllers\HomeController@index')->name('home');
+// Route::get('/tin-tuc','\HomeController@getNew')->name('new');
+// Route::get('/chuyen-muc/{id}',[HomeController::class,'getCategory']);
 
-Route::prefix('admin')->group(function(){
-    Route::get('/tin-tuc/{id?}-{slug?}.html',function($id=null,$slug=null){
-        $content = 'phương thức get của giáo làng: ';
-        $content.= 'id = '.$id.'<br/>';
-        $content.= 'slug  = '.$slug;
-        return $content;
-    })->where('id','\d+')->where('slug','.+')->name('admin.tintuc');
+// Route::prefix('admin')->group(function(){
+//     Route::get('/tin-tuc/{id?}-{slug?}.html',function($id=null,$slug=null){
+//         $content = 'phương thức get của giáo làng: ';
+//         $content.= 'id = '.$id.'<br/>';
+//         $content.= 'slug  = '.$slug;
+//         return $content;
+//     })->where('id','\d+')->where('slug','.+')->name('admin.tintuc');
     
-    Route::get('show-form',function(){
-        return view('form');
-    })->name('admin.show-form');
-    Route::prefix('product')->middleware('CheckPermission')->group(function(){
-        Route::get('/',function(){
-            return 'danh sách sản phẩm';
-        });
-        Route::get('add',function(){
-            return 'thêm sản phẩm';
-        })->name('admin.product.add');
-        Route::get('edit',function(){
-            return 'sửa sản phẩm';
-        });
-        Route::get('delete',function(){
-            return 'xóa sản phẩm';
-        });
+//     Route::get('show-form',function(){
+//         return view('form');
+//     })->name('admin.show-form');
+//     Route::prefix('product')->middleware('CheckPermission')->group(function(){
+//         Route::get('/',function(){
+//             return 'danh sách sản phẩm';
+//         });
+//         Route::get('add',function(){
+//             return 'thêm sản phẩm';
+//         })->name('admin.product.add');
+//         Route::get('edit',function(){
+//             return 'sửa sản phẩm';
+//         });
+//         Route::get('delete',function(){
+//             return 'xóa sản phẩm';
+//         });
 
-    });
+//     });
+
+// });
+Route::prefix('category')->group(function(){
+    Route::get('/',[CategoriesController::class, 'index'])->name('categories.list');
+    Route::get('/edit/{id}',[CategoriesController::class,'getCategory'])->name('categories.list');
+    Route::post('/edit/{id}',[CategoriesController::class,'updateCategory'])->name('categories.edit');
+    Route::get('/add',[CategoriesController::class,'addCategory']);
+    Route::get('/add',[CategoriesController::class,'hanleAddCategory'])->name('categories.add');
+    Route::delete('/delete/{id}',[CategoriesController::class,'deleteCategory'])->name('categories.delete');
 
 });
 
+Route::prefix('admin')->group(function(){
+    Route::resource('products',ProductsController::class);
+});
