@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\http\Controllers\CategoriesController;
 use App\http\Controllers\Admin\ProductsController;
+use App\http\Controllers\Admin\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -89,9 +90,11 @@ Route::prefix('category')->group(function(){
     Route::get('/add',[CategoriesController::class,'addCategory']);
     Route::get('/add',[CategoriesController::class,'hanleAddCategory'])->name('categories.add');
     Route::delete('/delete/{id}',[CategoriesController::class,'deleteCategory'])->name('categories.delete');
-
 });
 
 Route::prefix('admin')->group(function(){
+    Route::get('/',[DashboardController::class,'index']);
     Route::resource('products',ProductsController::class);
 });
+
+
