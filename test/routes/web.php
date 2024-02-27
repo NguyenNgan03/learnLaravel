@@ -33,6 +33,9 @@ Route::prefix('category')->group(function () {
     Route::post('/add', [CategoryController::class, 'showCategory']);
 
     Route::delete('/delete/{id}', [CategoryController::class, 'deleteCategory']);
+
+    Route::post("/upload", [CategoryController::class, 'Handlefile'])->name('category.file');
+    Route::get("/upload", [CategoryController::class, 'getFile']);
 });
 
 Route::middleware('autho.admin')->prefix('admin')->group(function () {
