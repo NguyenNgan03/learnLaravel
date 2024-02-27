@@ -90,7 +90,6 @@ Route::prefix('category')->group(function(){
     Route::get('/add',[CategoriesController::class,'addCategory']);
     Route::get('/add',[CategoriesController::class,'hanleAddCategory'])->name('categories.add');
     Route::delete('/delete/{id}',[CategoriesController::class,'deleteCategory'])->name('categories.delete');
-
 });
 
 Route::prefix('admin')->group(function(){
